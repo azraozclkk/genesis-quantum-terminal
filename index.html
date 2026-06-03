@@ -17,162 +17,268 @@
         }
 
         .stApp {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 1rem;
         }
 
-        h1 { font-weight: 700; font-size: 2.5rem; margin-bottom: 0.5rem; color: #ffffff; }
-        .subtitle { color: rgba(250, 250, 250, 0.6); margin-bottom: 2rem; font-size: 1.1rem; }
+        /* Başlık Alanı */
+        .header-container {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(250, 250, 250, 0.1);
+            padding-bottom: 1.5rem;
+        }
+        .header-container h1 {
+            color: #00ffcc; /* Canlı Yeşil/Mavi Başlık */
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .header-container p {
+            color: rgba(250, 250, 250, 0.7);
+            font-size: 1.1rem;
+            margin: 0;
+        }
 
-        /* Grid Sistemi */
-        .main-grid {
+        /* Ana Grid Düzeni (Sol Panel - Sağ İçerik) */
+        .main-layout {
             display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 30px;
+            grid-template-columns: 340px 1fr;
+            gap: 25px;
         }
 
-        @media (max-width: 800px) {
-            .main-grid { grid-template-columns: 1fr; }
+        @media (max-width: 900px) {
+            .main-layout { grid-template-columns: 1fr; }
         }
 
-        /* Sol Menü / Ayarlar */
+        /* Sol Panel / Simülasyon Ayarları */
         .sidebar {
             background-color: #131722;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             border: 1px solid rgba(250, 250, 250, 0.1);
             height: fit-content;
         }
+        .sidebar h2 {
+            font-size: 1.3rem;
+            color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(250, 250, 250, 0.1);
+            padding-bottom: 8px;
+        }
 
-        .sidebar h3 { margin-top: 0; border-bottom: 1px solid rgba(250, 250, 250, 0.1); padding-bottom: 10px; }
-
+        /* Elementler */
         .stSelectbox { margin-bottom: 1.5rem; }
-        .stSelectbox label { font-size: 14px; margin-bottom: 8px; display: block; color: rgba(250, 250, 250, 0.8); }
+        .stSelectbox label {
+            font-size: 14px;
+            color: rgba(250, 250, 250, 0.85);
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 600;
+        }
         .stSelectbox select {
-            width: 100%; padding: 0.6rem; font-size: 0.95rem; background-color: #262730;
-            color: white; border: 1px solid rgba(250, 250, 250, 0.2); border-radius: 0.5rem; outline: none;
+            width: 100%;
+            padding: 10px;
+            font-size: 0.95rem;
+            background-color: #262730;
+            color: white;
+            border: 1px solid rgba(250, 250, 250, 0.2);
+            border-radius: 6px;
+            outline: none;
+            cursor: pointer;
         }
+        .stSelectbox select:focus { border-color: #00ffcc; }
 
+        /* Butonlar */
         .stButton button {
-            width: 100%; background-color: #262730; color: #fafafa; border: 1px solid rgba(250, 250, 250, 0.2);
-            padding: 0.6rem; border-radius: 0.5rem; font-size: 1rem; cursor: pointer; transition: all 0.2s;
-            margin-bottom: 10px; font-weight: 600;
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 12px;
         }
-        .stButton button:hover { border-color: #ff4b4b; color: #ff4b4b; }
-        .btn-run { background-color: #ff4b4b !important; color: white !important; border: none !important; }
-        .btn-run:hover { background-color: #e63e3e !important; color: white !important; }
-
-        /* Metrik Kartları */
-        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 2rem; }
-        .metric-card { background-color: #1a1c24; padding: 15px; border-radius: 8px; border: 1px solid rgba(250, 250, 250, 0.05); }
-        .metric-card label { font-size: 13px; color: rgba(250, 250, 250, 0.6); }
-        .metric-card .value { font-size: 1.8rem; font-weight: 600; margin: 5px 0; }
-        .delta-red { color: #ff4b4b; font-size: 13px; }
-
-        /* Grafikler ve Paneller */
-        .chart-container { background-color: #131722; padding: 20px; border-radius: 10px; border: 1px solid rgba(250, 250, 250, 0.1); margin-bottom: 2rem; }
+        .btn-success {
+            background-color: #00cc96;
+            color: white;
+            border: none;
+        }
+        .btn-success:hover { background-color: #00ffcc; }
         
-        .intel-panel { background-color: #1a1c24; border-left: 4px solid #ff4b4b; padding: 15px; border-radius: 4px; margin-bottom: 2rem; max-height: 200px; overflow-y: auto; }
-        .intel-title { font-weight: bold; color: #ff4b4b; margin-bottom: 8px; font-size: 14px; }
-        .intel-item { font-size: 13px; margin-bottom: 6px; border-bottom: 1px solid rgba(250, 250, 250, 0.05); padding-bottom: 4px; }
+        .btn-download {
+            background-color: #0066ff;
+            color: white;
+            border: none;
+        }
+        .btn-download:hover { background-color: #3385ff; }
 
-        /* Tablolar */
-        .table-section h3 { margin-bottom: 10px; }
-        .table-container { overflow-x: auto; background-color: #131722; border-radius: 10px; border: 1px solid rgba(250, 250, 250, 0.1); }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
-        th, td { padding: 12px; border-bottom: 1px solid rgba(250, 250, 250, 0.05); }
+        /* Sağ Taraf: Metrikler Projeksiyonu */
+        .content-area h2 {
+            font-size: 1.4rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+        }
+
+        /* Üst 3'lü Metrik Kartları */
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 2rem;
+        }
+        .metric-card {
+            background-color: #171a24;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(250, 250, 250, 0.05);
+            text-align: center;
+        }
+        .metric-card label { font-size: 13px; color: rgba(250, 250, 250, 0.6); display: block; }
+        .metric-card .value { font-size: 1.8rem; font-weight: 700; margin: 8px 0; color: #ff4b4b; }
+        .metric-card .status { font-size: 12px; font-weight: 600; color: #ff4b4b; }
+
+        /* Canlı İstihbarat & Grafik Alanı */
+        .panel-container {
+            background-color: #131722;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(250, 250, 250, 0.1);
+            margin-bottom: 2rem;
+        }
+        .panel-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Tarihsel Arşiv ve Satıcı Baskısı Grafikleri */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 768px) { .charts-grid { grid-template-columns: 1fr; } }
+
+        /* Tablo Alanı */
+        .table-wrapper {
+            overflow-x: auto;
+            background-color: #131722;
+            border-radius: 8px;
+            border: 1px solid rgba(250, 250, 250, 0.1);
+        }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+        th, td { padding: 12px 16px; border-bottom: 1px solid rgba(250, 250, 250, 0.05); }
         th { color: rgba(250, 250, 250, 0.6); font-weight: 600; background-color: rgba(250, 250, 250, 0.02); }
 
-        /* Sözlük / Accordion */
-        .dictionary-section { margin-top: 2rem; background-color: #131722; padding: 20px; border-radius: 10px; border: 1px solid rgba(250, 250, 250, 0.1); }
-        .dict-item { margin-bottom: 12px; }
-        .dict-title { font-weight: 600; color: #ff4b4b; }
-        .dict-desc { font-size: 13px; color: rgba(250, 250, 250, 0.7); }
+        /* Sözlük Bölümü */
+        .dictionary-box {
+            background-color: #131722;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(250, 250, 250, 0.1);
+            margin-top: 2rem;
+        }
+        .dict-title { font-weight: 600; color: #00ffcc; margin-top: 15px; font-size: 15px; }
+        .dict-text { font-size: 13.5px; color: rgba(250, 250, 250, 0.7); margin-top: 4px; }
     </style>
 </head>
 <body>
 
 <div class="stApp">
-    <h1>Genesis Quantum 🪙</h1>
-    <div class="subtitle">Bitcoin Makro Risk, Likidite ve Algoritmik Baskı İstihbarat Terminali</div>
+    <div class="header-container">
+        <h1>Genesis Quantum 🪙</h1>
+        <p>Bitcoin Makro Risk ve İstihbarat Simülasyon Terminali</p>
+    </div>
 
-    <div class="main-grid">
+    <div class="main-layout">
         <div class="sidebar">
-            <h3>Simülasyon Paneli</h3>
+            <h2>Simülasyon Ayarları</h2>
             
             <div class="stSelectbox">
-                <label>Piyasa Psikolojisi (Panik Seviyesi)</label>
+                <label>Piyasa Psikolojisi (Panik Katsayısı)</label>
                 <select id="panic-level">
-                    <option value="1.5">Düşük Duyarlılık (Normal Akış)</option>
-                    <option value="3.2">Orta Şok (Destek Testi)</option>
-                    <option value="5.5" selected>Yüksek Panik (Sistemik Çöküş)</option>
+                    <option value="1.2">Düşük Duyarlılık (Normal Dönem)</option>
+                    <option value="2.5">Orta Şok (Destek Kırılımı)</option>
+                    <option value="5.5" selected>Yüksek Panik (Chain Reaction)</option>
                 </select>
             </div>
 
             <div class="stSelectbox">
-                <label>Balina Baskısı (Whale Liquidations)</label>
+                <label>Balina Cüzdan Baskısı (Whale Volume)</label>
                 <select id="whale-volume">
-                    <option value="800">800 BTC - Kısa Vadeli Kâr Satışı</option>
-                    <option value="3500" selected>3,500 BTC - Tezgah Üstü (OTC) Baskı</option>
-                    <option value="9000">9,000 BTC - Kurumsal Kapitülasyon</option>
+                    <option value="500">500 BTC - Hafif Satış</option>
+                    <option value="2500" selected>2,500 BTC - Kurumsal Tasfiye</option>
+                    <option value="7500">7,500 BTC - Sistemik Çöküş</option>
                 </select>
             </div>
 
             <div class="stSelectbox">
-                <label>Emir Defteri Likidite Oranı</label>
+                <label>Emir Defteri Likidite Derinliği</label>
                 <select id="liquidity-depth">
-                    <option value="0.8">Derin Likidite (%20 Kayma Oranı)</option>
-                    <option value="0.4" selected>Sığ Likidite (%60 Kayma Oranı)</option>
-                    <option value="0.15">Kritik İllikit Pazar (%85 Slippage)</option>
+                    <option value="0.9">Derin Likidite (%10 Absorbe)</option>
+                    <option value="0.5" selected>Sığ Likidite (%50 Kayma)</option>
+                    <option value="0.2">Kritik İllikit Pazar (%80 Slippage)</option>
                 </select>
             </div>
 
-            <div class="stButton"><button class="btn-run" onclick="runComprehensiveSimulation()">⚡ Simülasyonu Başlat</button></div>
-            <div class="stButton"><button onclick="downloadCSVData()">📥 Raporu CSV Olarak Aktar</button></div>
+            <div class="stButton"><button class="btn-success" onclick="runGenesisEngine()">Simülasyonu Çalıştır</button></div>
+            <div class="stButton"><button class="btn-download" onclick="exportToCSV()">💾 CSV Olarak İndir</button></div>
         </div>
 
-        <div>
-            <div class="metrics-grid">
+        <div class="content-area">
+            <h2>Simülasyon Sonuç Projeksiyonu</h2>
+
+            <div class="metrics-row">
                 <div class="metric-card">
-                    <label>Net Makro Risk Skoru</label>
+                    <label>Net Risk Skoru</label>
                     <div class="value" id="risk-score">94.5%</div>
-                    <div class="delta-red">▲ Sinyal: Ekstrem Risk</div>
+                    <div class="status">Kritik Seviye</div>
                 </div>
                 <div class="metric-card">
-                    <label>Tahmini Slippage (Fiyat Kayması)</label>
-                    <div class="value" id="slippage-val">-%7.8</div>
-                    <div class="delta-red">▲ Kritik Kayma Oranı</div>
+                    <label>Tahmini Fiyat Slippage</label>
+                    <div class="value" id="slippage-val">-%1.3</div>
+                    <div class="status">Aşırı Kayma</div>
                 </div>
                 <div class="metric-card">
-                    <label>Sistemik Sipariş Kaybı</label>
-                    <div class="value" id="liquidity-loss">-54.8M$</div>
-                    <div class="delta-red">▼ Kurumsal Likidite Çıkışı</div>
+                    <label>Sistemik Likidite Kaybı</label>
+                    <div class="value" id="liquidity-loss">-1800.0M $</div>
+                    <div class="status">Negatif Akış</div>
                 </div>
             </div>
 
-            <div class="intel-panel">
-                <div class="intel-title">🚨 CANLI MAKRO İSTİHBARAT AKIŞI (SİMÜLE)</div>
-                <div id="intel-feed">
-                    </div>
+            <div class="charts-grid">
+                <div class="panel-container">
+                    <div class="panel-title">📈 Tarihsel Arşiv: Fiyat Trend Çöküşü</div>
+                    <canvas id="historyChart" style="max-height: 220px;"></canvas>
+                </div>
+                <div class="panel-container">
+                    <div class="panel-title">📊 Satıcı Grubu Hacim Dağılımı</div>
+                    <canvas id="sellerChart" style="max-height: 220px;"></canvas>
+                </div>
             </div>
 
-            <div class="chart-container">
-                <h3 style="margin-top:0; font-size:16px; color:rgba(250,250,250,0.8);">Bitcoin 30 Adımlık Fiyat Baskı Projeksiyonu</h3>
-                <canvas id="btcChart" style="max-height: 300px;"></canvas>
-            </div>
-
-            <div class="table-section">
-                <h3>📋 30 Adımlık Kademeli Simülasyon Geçmişi</h3>
-                <div class="table-container">
-                    <table id="simulation-table">
+            <div class="panel-container">
+                <div class="panel-title">📋 Canlı Veri Akışı</div>
+                <div class="table-wrapper">
+                    <table id="data-table">
                         <thead>
                             <tr>
-                                <th>Adım</th>
-                                <th>Olay / Emir Bloğu Tipi</th>
-                                <th>Hacim Baskısı</th>
-                                <th>Kalan Likidite</th>
-                                <th>Hesaplanan Fiyat</th>
+                                <th>Adım (Zaman)</th>
+                                <th>Emir Blok Tipi</th>
+                                <th>Hacim (BTC)</th>
+                                <th>Etki Katsayısı</th>
+                                <th>Oluşan Anlık Fiyat</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -181,20 +287,17 @@
                 </div>
             </div>
 
-            <div class="dictionary-section">
-                <h3 style="margin-top:0; color: #ffffff;">📖 Kripto Makro Risk Terimleri Sözlüğü</h3>
-                <div class="dict-item">
-                    <div class="dict-title">Slippage (Fiyat Kayması)</div>
-                    <div class="dict-desc">Büyük hacimli emirlerin, pazar derinliğinin yetersiz olması sebebiyle beklenen fiyattan daha kötü bir fiyattan gerçekleşmesi durumudur.</div>
-                </div>
-                <div class="dict-item">
-                    <div class="dict-title">Order Book Liquidity (Emir Defteri Derinliği)</div>
-                    <div class="dict-desc">Bir varlığın fiyatını kararsızlığa uğratmadan büyük alım veya satış emirlerini absorbe edebilme kapasitesidir.</div>
-                </div>
-                <div class="dict-item">
-                    <div class="dict-title">Cascading Liquidations (Zincirleme Tasfiyeler)</div>
-                    <div class="dict-desc">Fiyat düşüşünün vadeli işlemlerdeki kaldıraçlı pozisyonları patlatması ve bu patlamaların tetiklediği zorunlu satışların fiyatı daha da düşürerek bir çığ etkisi yaratmasıdır.</div>
-                </div>
+            <div class="dictionary-box">
+                <div class="panel-title">📖 Kripto Risk Literatürü ve Sözlük</div>
+                
+                <div class="dict-title">1. Slippage (Fiyat Kayması)</div>
+                <div class="dict-text">Yetersiz emir defteri likiditesi nedeniyle, büyük hacimli işlemlerin hedeflenen fiyattan saparak daha kötü bir fiyattan eşleşmesi durumudur.</div>
+
+                <div class="dict-title">2. Cascading Liquidation (Zincirleme Tasfiyeler)</div>
+                <div class="dict-text">Vadeli işlem piyasalarında long pozisyonların ani düşüşle patlaması ve bu zorunlu satışların spot piyasayı da çökerterek çığ etkisi yaratmasıdır.</div>
+
+                <div class="dict-title">3. Whale Pressure (Balina Baskısı)</div>
+                <div class="dict-text">Büyük miktarda kripto varlığa sahip cüzdanların (Balinaların) piyasaya ani ve yüklü miktarda satış emri göndererek pazar yapısını manipüle etmesidir.</div>
             </div>
 
         </div>
@@ -202,139 +305,139 @@
 </div>
 
 <script>
-    let simData = [];
-    let btcChartInstance = null;
+    let globalSimulationRows = [];
+    let historyChartInstance = null;
+    let sellerChartInstance = null;
 
-    const intelEvents = [
-        "Fed Açık Piyasa Komitesi üyelerinden şahin açıklamalar geldi.",
-        "OTC masalarında bilinmeyen bir balina cüzdanından 1200 BTC hareketliliği saptandı.",
-        "Kaldıraçlı long pozisyonlarda margin call oranları kritik sınıra ulaştı.",
-        "Asya piyasalarının açılışıyla kurumsal satış algoritmaları devreye girdi.",
-        "Madenci cüzdanlarından borsalara yönelen hacimde anlık %14 artış kaydedildi.",
-        "Sistemik vadeli tasfiye emirleri spot tahtasını baskılamaya başladı."
-    ];
-
-    function runComprehensiveSimulation() {
+    function runGenesisEngine() {
         const panic = parseFloat(document.getElementById('panic-level').value);
         const whale = parseFloat(document.getElementById('whale-volume').value);
         const liquidity = parseFloat(document.getElementById('liquidity-depth').value);
 
-        let currentPrice = 65000;
-        simData = [];
-        let labels = [];
-        let prices = [];
+        let initialPrice = 65000;
+        globalSimulationRows = [];
 
-        let tableBody = document.querySelector('#simulation-table tbody');
+        // Adımlar ve Blok Tipleri Tanımlamaları
+        const eventSteps = [
+            { time: "T+01 saniye", type: "Balina Tetikleme", vFactor: 0.4, pFactor: 0.96 },
+            { time: "T+02 saniye", type: "Kurumsal Algoritma Tetiklenmesi", vFactor: 0.6, pFactor: 1.25 },
+            { time: "T+03 saniye", type: "Kaldıraçlı İşlem Tasfiyesi (Cascade)", vFactor: 1.1, pFactor: 1.73 },
+            { time: "T+04 saniye", type: "Bireysel Panic Selling", vFactor: 1.5, pFactor: 2.40 }
+        ];
+
+        let tableBody = document.querySelector('#data-table tbody');
         tableBody.innerHTML = "";
 
-        let intelFeed = document.getElementById('intel-feed');
-        intelFeed.innerHTML = "";
+        let chartLabels = [];
+        let chartPrices = [];
+        let sellerVolumes = [];
 
-        // 30 ADIMLIK GERÇEKÇİ SİMÜLASYON MOTORU (apply_30_events.py mantığı)
-        for (let i = 1; i <= 30; i++) {
-            let baseImpact = (panic * whale * 0.002) / (liquidity * 10);
-            let waveEffect = Math.sin(i * 0.4) * 150; // Dalgalı piyasa dinamiği
-            let randomNoise = ((i % 3) * 45) - 30; // Tamamen deterministik yalancı gürültü (Antigravity uyumlu)
-            
-            let priceDrop = (baseImpact * (1 + (i * 0.05))) + waveEffect + randomNoise;
-            if(priceDrop < 0) priceDrop = 20; // Fiyatın aşırı yükselmesini veya negatif olmasını engelle
-            
-            currentPrice -= priceDrop;
-            
-            let currentLiquidity = (100 - (i * 2.5 * (1 / liquidity))).toFixed(1);
-            if(currentLiquidity < 5) currentLiquidity = 4.2;
+        eventSteps.forEach((step) => {
+            let volumeCalculated = (whale * step.vFactor).toFixed(2);
+            let dropValue = (volumeCalculated * step.pFactor * (panic / (liquidity * 10)));
+            initialPrice -= dropValue;
 
-            let blockType = "Bireysel Satış";
-            if (i % 7 === 0) blockType = "🚨 Balina Tasfiyesi";
-            else if (i % 4 === 0) blockType = "🤖 Algoritmik Bot Satışı";
-            else if (i % 10 === 0) blockType = "💥 Zincirleme Likidasyon";
-
-            let item = {
-                step: `Adım ${i}`,
-                type: blockType,
-                volume: (whale * 0.15 * (1 + (i*0.02))).toFixed(1) + " BTC",
-                liq: currentLiquidity + "%",
-                price: currentPrice.toFixed(2)
+            let rowData = {
+                time: step.time,
+                type: step.type,
+                volume: volumeCalculated + " BTC",
+                coef: step.pFactor + "x",
+                price: initialPrice.toFixed(2) + " $"
             };
 
-            simData.push(item);
-            labels.push(`A-${i}`);
-            prices.push(currentPrice.toFixed(2));
+            globalSimulationRows.push(rowData);
+            chartLabels.push(step.time);
+            chartPrices.push(initialPrice.toFixed(2));
+            sellerVolumes.push(parseFloat(volumeCalculated));
 
-            // Tabloyu Doldur
-            let row = `<tr>
-                <td>${item.step}</td>
-                <td>${item.type}</td>
-                <td style="color:#ff4b4b;">${item.volume}</td>
-                <td>${item.liq}</td>
-                <td style="color:#09ab3b; font-weight:600;">$${item.price}</td>
+            let tr = `<tr>
+                <td>${rowData.time}</td>
+                <td><b>${rowData.type}</b></td>
+                <td style="color:#ff4b4b; font-weight:600;">${rowData.volume}</td>
+                <td>${rowData.coef}</td>
+                <td style="color:#00ffcc; font-weight:600;">${rowData.price}</td>
             </tr>`;
-            tableBody.innerHTML += row;
+            tableBody.innerHTML += tr;
+        });
 
-            // Rastgele aralıklarla istihbarat mesajı üret (live_intel.py yansıması)
-            if (i % 5 === 0) {
-                let intelText = intelEvents[(i / 5) % intelEvents.length];
-                intelFeed.innerHTML += `<div class="intel-item">⏳ <b>[Adım ${i}]</b> - ${intelText}</div>`;
-            }
-        }
+        // Dinamik Metrik Hesaplamaları
+        let calculatedRisk = ((panic * 12) + (whale * 0.006) + ((1 - liquidity) * 20)).toFixed(1);
+        let calculatedSlippage = (((65000 - initialPrice) / 65000) * 100).toFixed(1);
+        let calculatedLiquidityLoss = (whale * panic * 1.3).toFixed(1);
 
-        // Üst Metrik Güncellemeleri
-        let finalRisk = ((panic * 12) + (whale * 0.006) + ((1 - liquidity) * 25)).toFixed(1);
-        document.getElementById('risk-score').innerText = `${Math.min(finalRisk, 100)}%`;
-        document.getElementById('slippage-val').innerText = `-%${(((65000 - currentPrice) / 65000) * 100).toFixed(1)}`;
-        document.getElementById('liquidity-loss').innerText = `-${((whale * panic * 2.1) / 10).toFixed(1)}M $`;
+        document.getElementById('risk-score').innerText = `${Math.min(calculatedRisk, 100)}%`;
+        document.getElementById('slippage-val').innerText = `-%${calculatedSlippage}`;
+        document.getElementById('liquidity-loss').innerText = `-${calculatedLiquidityLoss}M $`;
 
-        // GRAFİĞİ ÇİZ/GÜNCELLE (add_charts.py yansıması)
-        if (btcChartInstance) {
-            btcChartInstance.destroy();
-        }
-
-        const ctx = document.getElementById('btcChart').getContext('2d');
-        btcChartInstance = new Chart(ctx, {
+        // GRAFİK 1: TARİHSEL TREND ÇÖKÜŞÜ (Çizgi Grafik)
+        if (historyChartInstance) historyChartInstance.destroy();
+        const ctx1 = document.getElementById('historyChart').getContext('2d');
+        historyChartInstance = new Chart(ctx1, {
             type: 'line',
             data: {
-                labels: labels,
+                labels: chartLabels,
                 datasets: [{
-                    label: 'Bitcoin Fiyatı ($)',
-                    data: prices,
-                    borderColor: '#ff4b4b',
-                    backgroundColor: 'rgba(255, 75, 75, 0.1)',
+                    label: 'Bitcoin Değeri ($)',
+                    data: chartPrices,
+                    borderColor: '#00ffcc',
+                    backgroundColor: 'rgba(0, 255, 204, 0.1)',
                     borderWidth: 2,
                     fill: true,
-                    tension: 0.2,
-                    pointRadius: 1
+                    tension: 0.1
                 }]
             },
             options: {
                 responsive: true,
                 plugins: { legend: { display: false } },
                 scales: {
-                    x: { grid: { color: 'rgba(250,250,250,0.05)' }, clicks: { color: '#fafafa' } },
-                    y: { grid: { color: 'rgba(250,250,250,0.05)' }, clicks: { color: '#fafafa' } }
+                    x: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' } }
+                }
+            }
+        });
+
+        // GRAFİK 2: SATICI LİKİDİTE DAĞILIMI (Bar Grafik)
+        if (sellerChartInstance) sellerChartInstance.destroy();
+        const ctx2 = document.getElementById('sellerChart').getContext('2d');
+        sellerChartInstance = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Balina', 'Kurumsal', 'Vadeli Tasfiye', 'Bireysel'],
+                datasets: [{
+                    label: 'Satış Baskısı Hacmi (BTC)',
+                    data: sellerVolumes,
+                    backgroundColor: ['#ff4b4b', '#ff7575', '#ff9e9e', '#ffc4c4'],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' } }
                 }
             }
         });
     }
 
-    function downloadCSVData() {
-        if(simData.length === 0) {
-            alert("Lütfen önce simülasyonu çalıştırın.");
-            return;
-        }
-        let csvContent = "data:text/csv;charset=utf-8,Adim,Emir Blogu Tipi,Hacim Baskisi,Kalan Likidite,Hesaplanan Fiyat\n";
-        simData.forEach(row => {
-            csvContent += `"${row.step}","${row.type}","${row.volume}","${row.liq}","${row.price}"\n`;
+    function exportToCSV() {
+        if(globalSimulationRows.length === 0) return;
+        let csv = "Zaman,Emir Blogu Tipi,Hacim (BTC),Etki Katsayisi,Olusan Fiyat\n";
+        globalSimulationRows.forEach(r => {
+            csv += `"${r.time}","${r.type}","${r.volume}","${r.coef}","${r.price}"\n`;
         });
-        const encodedUri = encodeURI(csvContent);
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "genesis_quantum_30_adim_veri.csv");
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute("download", "genesis_quantum_export.csv");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     }
 
-    window.onload = runComprehensiveSimulation;
+    // İlk açılışta simülasyonu tetikle
+    window.onload = runGenesisEngine;
 </script>
 
 </body>
