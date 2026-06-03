@@ -974,20 +974,40 @@
             container.innerHTML = '';
             HISTORY_DB.forEach(item => {
                 container.innerHTML += `
-                    <div class="timeline-item">
+                    <div class="timeline-item" onclick="openEventGraph('${item.date}')" style="cursor:pointer;">
                         <div class="timeline-year">${item.year}</div>
                         <div class="card timeline-box">
-                            <h4>
-                                <span>${item.title}</span>
-                                <span class="timeline-date">${item.date}</span>
-                            </h4>
-                            <p class="timeline-p" style="color: white; font-weight: 500;"><strong>Olay:</strong> ${item.desc}</p>
-                            <p class="timeline-p"><strong>Ana Dinamik:</strong> ${item.ana}</p>
-                            <p class="timeline-p" style="color:var(--success);"><strong>Sistemik Sonuç:</strong> ${item.res}</p>
+                            <h4><span>${item.title}</span> <span class="timeline-date">${item.date}</span></h4>
+                            <p class="timeline-p"><strong>Olay:</strong> ${item.desc}</p>
                         </div>
                     </div>
                 `;
             });
+        }
+        let eventChart = null;
+
+        function openEventGraph(date) {
+            document.getElementById('graphModal').style.display = 'block';
+            const ctx = document.getElementById('eventChart').getContext('2d');
+            
+            if(eventChart) eventChart.destroy();
+            
+            eventChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['T-30 gün', 'Olay Günü', 'T+30 gün'],
+                    datasets: [{
+                        label: 'BTC Fiyat Hareketi (Simüle)',
+                        data: [Math.random()*100, Math.random()*100 + 20, Math.random()*100 + 40],
+                        borderColor: '#58a6ff'
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        function closeModal() {
+            document.getElementById('graphModal').style.display = 'none';
         }
 
         // Uygulama Başlangıç Tetikleyicileri
@@ -997,5 +1017,11 @@
             runStochasticSimulation();
         };
     </script>
+    <div id="graphModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; padding:50px;">
+        <div style="background:#0d1117; width:90%; height:80%; margin:auto; padding:20px; border:1px solid #1f2937; position:relative; border-radius:10px;">
+            <button onclick="closeModal()" style="position:absolute; top:10px; right:10px; background:transparent; border:none; color:white; font-size:20px; cursor:pointer;">X</button>
+            <canvas id="eventChart"></canvas>
+        </div>
+    </div>
 </body>
 </html>
