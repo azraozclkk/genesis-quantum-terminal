@@ -3,442 +3,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Genesis Quantum: Bitcoin Risk ve İstihbarat Terminali</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Bitcoin Sovereign & Risk Intelligence Terminal</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap');
+        /* app.py içindeki senin orijinal CSS renk değişkenlerin ve stillerin */
+        :root {
+            --bg-color: #05070a;
+            --card-bg: #0d1117;
+            --border-color: #1f2937;
+            --text-color: #c9d1d9;
+            --highlight: #58a6ff;
+            --danger: #f85149;
+            --success: #3fb950;
+            --warning: #d29922;
+        }
         
         body {
-            font-family: 'Source Sans Pro', sans-serif;
-            background-color: #0e1117;
-            color: #fafafa;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             margin: 0;
-            padding: 20px;
-        }
-
-        .stApp {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-
-        /* Başlık Alanı */
-        .header-container {
-            text-align: center;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(250, 250, 250, 0.1);
-            padding-bottom: 1.5rem;
-        }
-        .header-container h1 {
-            color: #00ffcc; /* Canlı Yeşil/Mavi Başlık */
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 0 0 10px 0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .header-container p {
-            color: rgba(250, 250, 250, 0.7);
-            font-size: 1.1rem;
-            margin: 0;
-        }
-
-        /* Ana Grid Düzeni (Sol Panel - Sağ İçerik) */
-        .main-layout {
-            display: grid;
-            grid-template-columns: 340px 1fr;
-            gap: 25px;
-        }
-
-        @media (max-width: 900px) {
-            .main-layout { grid-template-columns: 1fr; }
-        }
-
-        /* Sol Panel / Simülasyon Ayarları */
-        .sidebar {
-            background-color: #131722;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(250, 250, 250, 0.1);
-            height: fit-content;
-        }
-        .sidebar h2 {
-            font-size: 1.3rem;
-            color: #ffffff;
-            margin-top: 0;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(250, 250, 250, 0.1);
-            padding-bottom: 8px;
-        }
-
-        /* Elementler */
-        .stSelectbox { margin-bottom: 1.5rem; }
-        .stSelectbox label {
-            font-size: 14px;
-            color: rgba(250, 250, 250, 0.85);
-            margin-bottom: 8px;
-            display: block;
-            font-weight: 600;
-        }
-        .stSelectbox select {
-            width: 100%;
-            padding: 10px;
-            font-size: 0.95rem;
-            background-color: #262730;
-            color: white;
-            border: 1px solid rgba(250, 250, 250, 0.2);
-            border-radius: 6px;
-            outline: none;
-            cursor: pointer;
-        }
-        .stSelectbox select:focus { border-color: #00ffcc; }
-
-        /* Butonlar */
-        .stButton button {
-            width: 100%;
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-bottom: 12px;
-        }
-        .btn-success {
-            background-color: #00cc96;
-            color: white;
-            border: none;
-        }
-        .btn-success:hover { background-color: #00ffcc; }
-        
-        .btn-download {
-            background-color: #0066ff;
-            color: white;
-            border: none;
-        }
-        .btn-download:hover { background-color: #3385ff; }
-
-        /* Sağ Taraf: Metrikler Projeksiyonu */
-        .content-area h2 {
-            font-size: 1.4rem;
-            margin-top: 0;
-            margin-bottom: 1.5rem;
-            color: #ffffff;
-        }
-
-        /* Üst 3'lü Metrik Kartları */
-        .metrics-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 2rem;
-        }
-        .metric-card {
-            background-color: #171a24;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid rgba(250, 250, 250, 0.05);
-            text-align: center;
-        }
-        .metric-card label { font-size: 13px; color: rgba(250, 250, 250, 0.6); display: block; }
-        .metric-card .value { font-size: 1.8rem; font-weight: 700; margin: 8px 0; color: #ff4b4b; }
-        .metric-card .status { font-size: 12px; font-weight: 600; color: #ff4b4b; }
-
-        /* Canlı İstihbarat & Grafik Alanı */
-        .panel-container {
-            background-color: #131722;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(250, 250, 250, 0.1);
-            margin-bottom: 2rem;
-        }
-        .panel-title {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
             display: flex;
-            align-items: center;
-            gap: 8px;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        /* Tarihsel Arşiv ve Satıcı Baskısı Grafikleri */
-        .charts-grid {
+        /* Sol Menü (Sidebar) Tasarımın */
+        .sidebar {
+            width: 280px;
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .sidebar h2 {
+            color: white;
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .sidebar hr {
+            border: 0;
+            border-top: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(88, 166, 255, 0.1);
+            color: var(--highlight);
+        }
+
+        .nav-btn.active {
+            background-color: var(--highlight);
+            color: #05070a;
+            font-weight: bold;
+        }
+
+        /* Ana İçerik Alanı */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        /* Senin Kart Tasarımın */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        h2, h3 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        .grid-cards {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 2rem;
+            gap: 16px;
         }
-        @media (max-width: 768px) { .charts-grid { grid-template-columns: 1fr; } }
 
-        /* Tablo Alanı */
-        .table-wrapper {
-            overflow-x: auto;
-            background-color: #131722;
-            border-radius: 8px;
-            border: 1px solid rgba(250, 250, 250, 0.1);
+        /* Slider ve Girdiler */
+        .form-group {
+            margin-bottom: 15px;
         }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
-        th, td { padding: 12px 16px; border-bottom: 1px solid rgba(250, 250, 250, 0.05); }
-        th { color: rgba(250, 250, 250, 0.6); font-weight: 600; background-color: rgba(250, 250, 250, 0.02); }
 
-        /* Sözlük Bölümü */
-        .dictionary-box {
-            background-color: #131722;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(250, 250, 250, 0.1);
-            margin-top: 2rem;
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
         }
-        .dict-title { font-weight: 600; color: #00ffcc; margin-top: 15px; font-size: 15px; }
-        .dict-text { font-size: 13.5px; color: rgba(250, 250, 250, 0.7); margin-top: 4px; }
+
+        .form-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--highlight);
+        }
+
+        .btn-run {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .btn-run:hover {
+            opacity: 0.9;
+        }
+
+        /* Sözlük Arama Kutusu */
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: white;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        /* Senin Orijinal Canlı Efektlerin */
+        .status-live {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: var(--danger);
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: blink 1.5s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        .tab-section {
+            display: none;
+        }
+
+        .tab-section.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
 
-<div class="stApp">
-    <div class="header-container">
-        <h1>Genesis Quantum 🪙</h1>
-        <p>Bitcoin Makro Risk ve İstihbarat Simülasyon Terminali</p>
+    <div class="sidebar">
+        <h2>Sovereign Terminal</h2>
+        <hr>
+        <button class="nav-btn active" onclick="switchTab('stres')">Stres Analizi</button>
+        <button class="nav-btn" onclick="switchTab('satici')">Satıcı İstihbaratı</button>
+        <button class="nav-btn" onclick="switchTab('sozluk')">Teknik Sözlük</button>
+        <button class="nav-btn" onclick="switchTab('arsiv')">Tarihsel Arşiv</button>
     </div>
 
-    <div class="main-layout">
-        <div class="sidebar">
-            <h2>Simülasyon Ayarları</h2>
+    <div class="main-content">
+        
+        <div id="tab-stres" class="tab-section active">
+            <h2>STRES ANALİZİ VE SİSTEMİK RİSKLER</h2>
+            <p>Kuantum Stokastik Simülasyon Motoru.</p>
+            <hr style="border-color: var(--border-color);">
             
-            <div class="stSelectbox">
-                <label>Piyasa Psikolojisi (Panik Katsayısı)</label>
-                <select id="panic-level">
-                    <option value="1.2">Düşük Duyarlılık (Normal Dönem)</option>
-                    <option value="2.5">Orta Şok (Destek Kırılımı)</option>
-                    <option value="5.5" selected>Yüksek Panik (Chain Reaction)</option>
-                </select>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Simülasyon Parametreleri</h3>
+                    <div class="form-group">
+                        <label>Volatilite Çarpanı (v): <span id="v-val">1.5</span></label>
+                        <input type="range" id="param-v" min="0.1" max="5.0" step="0.1" value="1.5" oninput="document.getElementById('v-val').innerText=this.value">
+                    </div>
+                    <div class="form-group">
+                        <label>Balina Satış Baskısı (w): <span id="w-val">2.0</span></label>
+                        <input type="range" id="param-w" min="0.0" max="10.0" step="0.1" value="2.0" oninput="document.getElementById('w-val').innerText=this.value">
+                    </div>
+                    <button class="btn-run" onclick="runSimulation()">Simülasyonu Çalıştır</button>
+                </div>
+                <div class="card">
+                    <h3>Simülasyon Çıktısı (Canlı Grafik)</h3>
+                    <div id="chart-simulation" style="width:100%; height:400px;"></div>
+                </div>
             </div>
-
-            <div class="stSelectbox">
-                <label>Balina Cüzdan Baskısı (Whale Volume)</label>
-                <select id="whale-volume">
-                    <option value="500">500 BTC - Hafif Satış</option>
-                    <option value="2500" selected>2,500 BTC - Kurumsal Tasfiye</option>
-                    <option value="7500">7,500 BTC - Sistemik Çöküş</option>
-                </select>
-            </div>
-
-            <div class="stSelectbox">
-                <label>Emir Defteri Likidite Derinliği</label>
-                <select id="liquidity-depth">
-                    <option value="0.9">Derin Likidite (%10 Absorbe)</option>
-                    <option value="0.5" selected>Sığ Likidite (%50 Kayma)</option>
-                    <option value="0.2">Kritik İllikit Pazar (%80 Slippage)</option>
-                </select>
-            </div>
-
-            <div class="stButton"><button class="btn-success" onclick="runGenesisEngine()">Simülasyonu Çalıştır</button></div>
-            <div class="stButton"><button class="btn-download" onclick="exportToCSV()">💾 CSV Olarak İndir</button></div>
         </div>
 
-        <div class="content-area">
-            <h2>Simülasyon Sonuç Projeksiyonu</h2>
-
-            <div class="metrics-row">
-                <div class="metric-card">
-                    <label>Net Risk Skoru</label>
-                    <div class="value" id="risk-score">94.5%</div>
-                    <div class="status">Kritik Seviye</div>
+        <div id="tab-satici" class="tab-section">
+            <h2>SATICI İSTİHBARATI PANELI</h2>
+            <p>Piyasa üzerinde aktif baskı oluşturan kurumsal ve madenci cüzdan hareketleri.</p>
+            <hr style="border-color: var(--border-color);">
+            <div class="grid-cards" id="satici-container">
+                <div class="card">
+                    <h3><span class="status-live"></span>GBTC (Grayscale) ETF</h3>
+                    <p style="color: var(--danger); font-size: 1.5rem; font-weight: bold; margin: 5px 0;">$241.5M</p>
+                    <p><strong>Durum:</strong> Canlı Piyasa Aktif</p>
+                    <p><strong>Isı Derecesi:</strong> <span style="color: var(--warning);">Orta</span></p>
+                    <p><strong>Rotalar:</strong> Coinbase Prime</p>
                 </div>
-                <div class="metric-card">
-                    <label>Tahmini Fiyat Slippage</label>
-                    <div class="value" id="slippage-val">-%1.3</div>
-                    <div class="status">Aşırı Kayma</div>
-                </div>
-                <div class="metric-card">
-                    <label>Sistemik Likidite Kaybı</label>
-                    <div class="value" id="liquidity-loss">-1800.0M $</div>
-                    <div class="status">Negatif Akış</div>
-                </div>
-            </div>
-
-            <div class="charts-grid">
-                <div class="panel-container">
-                    <div class="panel-title">📈 Tarihsel Arşiv: Fiyat Trend Çöküşü</div>
-                    <canvas id="historyChart" style="max-height: 220px;"></canvas>
-                </div>
-                <div class="panel-container">
-                    <div class="panel-title">📊 Satıcı Grubu Hacim Dağılımı</div>
-                    <canvas id="sellerChart" style="max-height: 220px;"></canvas>
+                <div class="card">
+                    <h3><span class="status-live"></span>Madenci Kapitülasyon Riski</h3>
+                    <p style="color: var(--danger); font-size: 1.5rem; font-weight: bold; margin: 5px 0;">184.2 EH/s</p>
+                    <p><strong>Durum:</strong> Ağ Üzerinden Hesaplanan</p>
+                    <p><strong>Isı Derecesi:</strong> <span style="color: var(--success);">Düşük</span></p>
+                    <p><strong>Rotalar:</strong> Binance, B2B OTC</p>
                 </div>
             </div>
-
-            <div class="panel-container">
-                <div class="panel-title">📋 Canlı Veri Akışı</div>
-                <div class="table-wrapper">
-                    <table id="data-table">
-                        <thead>
-                            <tr>
-                                <th>Adım (Zaman)</th>
-                                <th>Emir Blok Tipi</th>
-                                <th>Hacim (BTC)</th>
-                                <th>Etki Katsayısı</th>
-                                <th>Oluşan Anlık Fiyat</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="dictionary-box">
-                <div class="panel-title">📖 Kripto Risk Literatürü ve Sözlük</div>
-                
-                <div class="dict-title">1. Slippage (Fiyat Kayması)</div>
-                <div class="dict-text">Yetersiz emir defteri likiditesi nedeniyle, büyük hacimli işlemlerin hedeflenen fiyattan saparak daha kötü bir fiyattan eşleşmesi durumudur.</div>
-
-                <div class="dict-title">2. Cascading Liquidation (Zincirleme Tasfiyeler)</div>
-                <div class="dict-text">Vadeli işlem piyasalarında long pozisyonların ani düşüşle patlaması ve bu zorunlu satışların spot piyasayı da çökerterek çığ etkisi yaratmasıdır.</div>
-
-                <div class="dict-title">3. Whale Pressure (Balina Baskısı)</div>
-                <div class="dict-text">Büyük miktarda kripto varlığa sahip cüzdanların (Balinaların) piyasaya ani ve yüklü miktarda satış emri göndererek pazar yapısını manipüle etmesidir.</div>
-            </div>
-
         </div>
+
+        <div id="tab-sozluk" class="tab-section">
+            <h2>TEKNİK SÖZLÜK</h2>
+            <p>Kriptografik ve makroekonomik terimler veri tabanı.</p>
+            <hr style="border-color: var(--border-color);">
+            <input type="text" id="sozluk-search" class="search-box" placeholder="Terim veya açıklama ara..." oninput="filterGlossary()">
+            <div class="grid-cards" id="glossary-container"></div>
+        </div>
+
+        <div id="tab-arsiv" class="tab-section">
+            <h2>TARİHSEL ARŞİV VE SİSTEMİK KRİZLER</h2>
+            <p>2008'den günümüze Bitcoin ağını şekillendiren yapısal dönüm noktaları.</p>
+            <hr style="border-color: var(--border-color);">
+            <div id="archive-container"></div>
+        </div>
+
     </div>
-</div>
 
-<script>
-    let globalSimulationRows = [];
-    let historyChartInstance = null;
-    let sellerChartInstance = null;
+    <script>
+        // --- DATA STRUCTURES (app.py'deki veritabanlarının birebir JS hali) ---
+        const GLOSSARY_DB = {
+            "Blockchain (Blok Zinciri)": "Verilerin kriptografik olarak birbirine bağlandığı, değiştirilemez ve merkeziyetsiz dijital kayıt defteri.",
+            "PoW (Proof of Work)": "Madencilerin matematiksel bulmacaları çözerek işlemleri doğruladığı konsensüs algoritması.",
+            "Halving (Yarılanma)": "Bitcoin ağında yaklaşık her dört yılda bir madenci blok ödülünün yarı yarıya azalması.",
+            "Whale (Balina)": "Piyasayı sarsacak kadar çok elinde mal tutan büyük cüzdan sahipleri."
+        };
 
-    function runGenesisEngine() {
-        const panic = parseFloat(document.getElementById('panic-level').value);
-        const whale = parseFloat(document.getElementById('whale-volume').value);
-        const liquidity = parseFloat(document.getElementById('liquidity-depth').value);
-
-        let initialPrice = 65000;
-        globalSimulationRows = [];
-
-        // Adımlar ve Blok Tipleri Tanımlamaları
-        const eventSteps = [
-            { time: "T+01 saniye", type: "Balina Tetikleme", vFactor: 0.4, pFactor: 0.96 },
-            { time: "T+02 saniye", type: "Kurumsal Algoritma Tetiklenmesi", vFactor: 0.6, pFactor: 1.25 },
-            { time: "T+03 saniye", type: "Kaldıraçlı İşlem Tasfiyesi (Cascade)", vFactor: 1.1, pFactor: 1.73 },
-            { time: "T+04 saniye", type: "Bireysel Panic Selling", vFactor: 1.5, pFactor: 2.40 }
+        const HISTORY_DB = [
+            {"year": 2008, "title": "Bitcoin Whitepaper", "desc": "Satoshi Nakamoto makaleyi yayımladı.", "ana": "İlk merkeziyetsiz para fikri.", "res": "Finansal devrimin temeli atıldı."},
+            {"year": 2020, "title": "Covid-19 Kara Perşembe", "desc": "Bir günde %50'lik devasa çöküş yaşandı.", "ana": "Küresel likidite krizi tetiklendi.", "res": "Devasa parasal genişleme ile boğa piyasası başladı."}
         ];
 
-        let tableBody = document.querySelector('#data-table tbody');
-        tableBody.innerHTML = "";
+        // --- NAVİGASYON (Sekme Değiştirici) ---
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            event.target.classList.add('active');
+            
+            if(tabName === 'stres') { runSimulation(); }
+        }
 
-        let chartLabels = [];
-        let chartPrices = [];
-        let sellerVolumes = [];
+        // --- TEKNİK SÖZLÜK FİLTRELEME MOTORU ---
+        function filterGlossary() {
+            const query = document.getElementById('sozluk-search').value.toLowerCase();
+            const container = document.getElementById('glossary-container');
+            container.innerHTML = '';
+            
+            Object.entries(GLOSSARY_DB).forEach(([term, definition]) => {
+                if(term.toLowerCase().includes(query) || definition.toLowerCase().includes(query)) {
+                    container.innerHTML += `
+                        <div class="card" style="height: 120px; overflow-y: auto;">
+                            <strong style="color:var(--highlight); font-size:1.1rem;">${term}</strong>
+                            <p style="margin-top:8px; font-size:0.95rem; margin-bottom:0;">${definition}</p>
+                        </div>`;
+                }
+            });
+        }
 
-        eventSteps.forEach((step) => {
-            let volumeCalculated = (whale * step.vFactor).toFixed(2);
-            let dropValue = (volumeCalculated * step.pFactor * (panic / (liquidity * 10)));
-            initialPrice -= dropValue;
+        // --- TARİHSEL ARŞİV OLUŞTURUCU ---
+        function renderArchive() {
+            const container = document.getElementById('archive-container');
+            container.innerHTML = '';
+            HISTORY_DB.forEach(item => {
+                container.innerHTML += `
+                    <div class="card">
+                        <h3 style="color: var(--highlight);">${item.year} - ${item.title}</h3>
+                        <p><strong>Açıklama:</strong> ${item.desc}</p>
+                        <p><strong>Analiz:</strong> ${item.ana}</p>
+                        <p style="color: var(--success);"><strong>Sonuç:</strong> ${item.res}</p>
+                    </div>`;
+            });
+        }
 
-            let rowData = {
-                time: step.time,
-                type: step.type,
-                volume: volumeCalculated + " BTC",
-                coef: step.pFactor + "x",
-                price: initialPrice.toFixed(2) + " $"
+        // --- KUANTUM STOKASTIK SİMÜLASYON MOTORU (Orijinal Matematiksel Döngün) ---
+        function runSimulation() {
+            const v = parseFloat(document.getElementById('param-v').value);
+            const w = parseFloat(document.getElementById('param-w').value);
+            
+            let prices = [60000];
+            let ticks = [];
+            
+            for(let i = 0; i < 50; i++) {
+                ticks.push(i);
+                if(i > 0) {
+                    // Senin Python'daki gürültü ve şok döngünün saf JS simulasyonu
+                    let change = (Math.random() - 0.5) * 1000 * v - (w * 200);
+                    let lastPrice = prices[prices.length - 1];
+                    prices.push(Math.max(1000, lastPrice + change));
+                }
+            }
+
+            // Plotly ile Senin Terminal Tasarımına Uygun Grafik Çizimi
+            const trace = {
+                x: ticks,
+                y: prices,
+                type: 'scatter',
+                mode: 'lines',
+                line: { color: '#58a6ff', width: 3 },
+                name: 'Simüle Edilen Fiyat'
             };
 
-            globalSimulationRows.push(rowData);
-            chartLabels.push(step.time);
-            chartPrices.push(initialPrice.toFixed(2));
-            sellerVolumes.push(parseFloat(volumeCalculated));
+            const layout = {
+                paper_bgcolor: '#0d1117',
+                plot_bgcolor: '#05070a',
+                xaxis: { gridcolor: '#1f2937', title: { text: 'Zaman (Tick)', color: '#c9d1d9' }, tickfont: {color: '#c9d1d9'} },
+                yaxis: { gridcolor: '#1f2937', title: { text: 'Fiyat ($)', color: '#c9d1d9' }, tickfont: {color: '#c9d1d9'} },
+                margin: { t: 20, b: 40, l: 60, r: 20 }
+            };
 
-            let tr = `<tr>
-                <td>${rowData.time}</td>
-                <td><b>${rowData.type}</b></td>
-                <td style="color:#ff4b4b; font-weight:600;">${rowData.volume}</td>
-                <td>${rowData.coef}</td>
-                <td style="color:#00ffcc; font-weight:600;">${rowData.price}</td>
-            </tr>`;
-            tableBody.innerHTML += tr;
-        });
+            Plotly.newPlot('chart-simulation', [trace], layout);
+        }
 
-        // Dinamik Metrik Hesaplamaları
-        let calculatedRisk = ((panic * 12) + (whale * 0.006) + ((1 - liquidity) * 20)).toFixed(1);
-        let calculatedSlippage = (((65000 - initialPrice) / 65000) * 100).toFixed(1);
-        let calculatedLiquidityLoss = (whale * panic * 1.3).toFixed(1);
-
-        document.getElementById('risk-score').innerText = `${Math.min(calculatedRisk, 100)}%`;
-        document.getElementById('slippage-val').innerText = `-%${calculatedSlippage}`;
-        document.getElementById('liquidity-loss').innerText = `-${calculatedLiquidityLoss}M $`;
-
-        // GRAFİK 1: TARİHSEL TREND ÇÖKÜŞÜ (Çizgi Grafik)
-        if (historyChartInstance) historyChartInstance.destroy();
-        const ctx1 = document.getElementById('historyChart').getContext('2d');
-        historyChartInstance = new Chart(ctx1, {
-            type: 'line',
-            data: {
-                labels: chartLabels,
-                datasets: [{
-                    label: 'Bitcoin Değeri ($)',
-                    data: chartPrices,
-                    borderColor: '#00ffcc',
-                    backgroundColor: 'rgba(0, 255, 204, 0.1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { color: 'rgba(255,255,255,0.05)' } },
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' } }
-                }
-            }
-        });
-
-        // GRAFİK 2: SATICI LİKİDİTE DAĞILIMI (Bar Grafik)
-        if (sellerChartInstance) sellerChartInstance.destroy();
-        const ctx2 = document.getElementById('sellerChart').getContext('2d');
-        sellerChartInstance = new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: ['Balina', 'Kurumsal', 'Vadeli Tasfiye', 'Bireysel'],
-                datasets: [{
-                    label: 'Satış Baskısı Hacmi (BTC)',
-                    data: sellerVolumes,
-                    backgroundColor: ['#ff4b4b', '#ff7575', '#ff9e9e', '#ffc4c4'],
-                    borderRadius: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { display: false } },
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' } }
-                }
-            }
-        });
-    }
-
-    function exportToCSV() {
-        if(globalSimulationRows.length === 0) return;
-        let csv = "Zaman,Emir Blogu Tipi,Hacim (BTC),Etki Katsayisi,Olusan Fiyat\n";
-        globalSimulationRows.forEach(r => {
-            csv += `"${r.time}","${r.type}","${r.volume}","${r.coef}","${r.price}"\n`;
-        });
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.setAttribute("download", "genesis_quantum_export.csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    // İlk açılışta simülasyonu tetikle
-    window.onload = runGenesisEngine;
-</script>
-
+        // Sayfa ilk yüklendiğinde çalışacak fonksiyonlar
+        window.onload = function() {
+            filterGlossary();
+            renderArchive();
+            runSimulation();
+        }
+    </script>
 </body>
 </html>
