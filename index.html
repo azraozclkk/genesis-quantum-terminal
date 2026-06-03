@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genesis Quantum: Bitcoin Risk ve İstihbarat Terminali</title>
+    <style>
+        :root {
+            --bg-color: #0b0f17;
+            --panel-bg: #131a26;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --border-color: #1e293b;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+        .header h1 {
+            color: var(--accent-green);
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+        .panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .panel h2 {
+            font-size: 1.2rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            color: var(--text-muted);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: white;
+            box-sizing: border-box;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--accent-green);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn:hover { background-color: #059669; }
+        .btn-csv {
+            background-color: #3b82f6;
+            margin-top: 10px;
+        }
+        .btn-csv:hover { background-color: #2563eb; }
+        .metrics-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .metric-card {
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+        .metric-card .title { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; }
+        .metric-card .value { font-size: 1.5rem; font-weight: bold; color: var(--accent-red); }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        th { color: var(--text-muted); font-weight: 600; }
+        .text-red { color: var(--accent-red); }
+        .text-green { color: var(--accent-green); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>GENESIS QUANTUM</h1>
+        <p style="color: var(--text-muted); margin: 0;">Bitcoin Makro Risk ve İstihbarat Simülasyon Terminali</p>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="panel">
+            <h2>Simülasyon Ayarları</h2>
+            <div class="form-group">
+                <label>Piyasa Psikolojisi (Panik Katsayısı)</label>
+                <select id="panic-level">
+                    <option value="1.2">Düşük Duyarlılık (Normal Dönem)</option>
+                    <option value="2.5">Orta Şok (Destek Kırılımı)</option>
+                    <option value="4.8" selected>Yüksek Panik (Chain Reaction)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Balina Cüzdan Baskısı (Whale Volume)</label>
+                <select id="whale-volume">
+                    <option value="500">500 BTC - Hafif Satış</option>
+                    <option value="2500" selected>2,500 BTC - Kurumsal Tasfiye</option>
+                    <option value="7500">7,500 BTC - Sistemik Çöküş</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Emir Defteri Likidite Derinliği</label>
+                <select id="liquidity-depth">
+                    <option value="0.9">Derin Likidite (%10 Absorbe)</option>
+                    <option value="0.5" selected>Sığ Likidite (%50 Kayma)</option>
+                    <option value="0.2">Kritik İllikit Pazar (%80 Slippage)</option>
+                </select>
+            </div>
+            <button class="btn" onclick="runSimulation()">Simülasyonu Çalıştır</button>
+            <button class="btn btn-csv" onclick="downloadCSV()">📥 CSV Olarak İndir</button>
+        </div>
+
+        <div class="panel">
+            <h2>Simülasyon Sonuç Projeksiyonu</h2>
+            <div class="metrics-summary">
+                <div class="metric-card">
+                    <div class="title">Net Risk Skoru</div>
+                    <div class="value" id="risk-score">82.4%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="title">Tahmini Fiyat Slippage</div>
+                    <div class="value" id="slippage-val">-%6.4</div>
+                </div>
+                <div class="metric-card">
+                    <div class="title">Sistemik Likidite Kaybı</div>
+                    <div class="value" id="liquidity-loss">-34.2M$</div>
+                </div>
+            </div>
+            <h2>📋 Canlı Veri Akışı</h2>
+            <div class="table-container">
+                <table id="data-table">
+                    <thead>
+                        <tr>
+                            <th>Adım (Zaman)</th>
+                            <th>Emir Blok Tipi</th>
+                            <th>Hacim (BTC)</th>
+                            <th>Etki Katsayısı</th>
+                            <th>Oluşan Anlık Fiyat</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentSimulationData = [];
+    function runSimulation() {
+        const panic = parseFloat(document.getElementById('panic-level').value);
+        const whale = parseFloat(document.getElementById('whale-volume').value);
+        const liquidity = parseFloat(document.getElementById('liquidity-depth').value);
+        let basePrice = 65000;
+        currentSimulationData = [];
+        const steps = [
+            { name: "Balina Tetikleme", volMult: 0.4, panicMult: 1.0 },
+            { name: "Kurumsal Algoritma Tetiklenmesi", volMult: 0.6, panicMult: 1.3 },
+            { name: "Kaldıraçlı İşlem Tasfiyesi (Cascade)", volMult: 1.1, panicMult: 1.8 },
+            { name: "Bireysel Panic Selling", volMult: 1.5, panicMult: 2.5 }
+        ];
+        let tbody = document.querySelector('#data-table tbody');
+        tbody.innerHTML = "";
+        let totalSlippage = 0;
+        steps.forEach((step, index) => {
+            let calculatedVol = (whale * step.volMult).toFixed(2);
+            let impactFactor = ((panic * step.panicMult) / (liquidity * 10)).toFixed(2);
+            let priceDrop = calculatedVol * impactFactor * 0.05;
+            basePrice = basePrice - priceDrop;
+            totalSlippage += priceDrop;
+            let rowData = {
+                step: `T+0${index + 1} saniye`,
+                name: step.name,
+                volume: calculatedVol,
+                impact: impactFactor,
+                price: basePrice.toFixed(2)
+            };
+            currentSimulationData.push(rowData);
+            let row = `<tr>
+                <td>${rowData.step}</td>
+                <td>${rowData.name}</td>
+                <td class="text-red">${rowData.volume} BTC</td>
+                <td>${rowData.impact}x</td>
+                <td class="text-green">${rowData.price} $</td>
+            </tr>`;
+            tbody.innerHTML += row;
+        });
+        let score = ((panic * 15) + (whale * 0.005) + ((1 - liquidity) * 20)).toFixed(1);
+        document.getElementById('risk-score').innerText = `${Math.min(score, 100)}%`;
+        document.getElementById('slippage-val').innerText = `-%${((totalSlippage / 65000) * 100).toFixed(1)}`;
+        document.getElementById('liquidity-loss').innerText = `-${((whale * panic * 1.5) / 10).toFixed(1)}M $`;
+    }
+    function downloadCSV() {
+        if(currentSimulationData.length === 0) { alert("Lütfen önce simülasyonu çalıştırın."); return; }
+        let csvContent = "data:text/csv;charset=utf-8,Adim,Emir Blok Tipi,Hacim (BTC),Etki Katsayisi,Anlik Fiyat\n";
+        currentSimulationData.forEach(row => {
+            csvContent += `"${row.step}","${row.name}","${row.volume}","${row.impact}","${row.price}"\n`;
+        });
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "genesis_quantum_simulasyon_verisi.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    window.onload = runSimulation;
+</script>
+</body>
+</html>
