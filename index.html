@@ -2,6 +2,8 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bitcoin Sovereign & Risk Intelligence Terminal</title>
     <!-- Grafik Motoru için Chart.js CDN -->
@@ -187,7 +189,26 @@
         .sim-btn:hover {
             opacity: 0.9;
         }
-
+<div style="display: flex; gap: 20px; margin-bottom: 20px;">
+    <div class="card" style="flex:1;">
+        <small>SON FİYAT</small>
+        <div style="font-size:1.5rem; font-weight:bold;">$64,230</div>
+    </div>
+    <div class="card" style="flex:1;">
+        <small>MİN. AJAN LİKİDİTE</small>
+        <div style="font-size:1.5rem; font-weight:bold; color:var(--warning);">4.2B</div>
+    </div>
+    <div class="card" style="flex:1;">
+        <small>KRİZ GÖSTERGESİ</small>
+        <div style="font-size:1.5rem; font-weight:bold; color:var(--danger);">%84.2</div>
+    </div>
+</div>
+        <div class="card">
+    <div class="slider-group"> 
+        <label>Başlangıç Aktif Ajanlar (a): <span id="a-val" class="slider-val">100</span></label>
+        <input type="range" id="param-a" min="10" max="1000" step="10" value="100" oninput="updateSliderLabel('a')">
+    </div>
+</div>
         .chart-container {
             position: relative;
             width: 100%;
@@ -928,6 +949,24 @@
                     }]
                 },
                 options: {
+                    
+                responsive: true,
+                plugins: {
+                    // Kırmızı blok (annotation) buraya başlıyor
+                    annotation: {
+                        annotations: {
+                            liquidityZone: {
+                                type: 'box',
+                                xMin: 10,
+                                xMax: 20,
+                                backgroundColor: 'rgba(248, 81, 73, 0.2)',
+                                borderColor: 'rgba(248, 81, 73, 0.5)',
+                                label: { content: 'Düşük Likidite Alanı', enabled: true }
+                            }
+                        }
+                    }
+                }
+            },
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
@@ -986,27 +1025,44 @@
         }
         let eventChart = null;
 
-        function openEventGraph(date) {
-            document.getElementById('graphModal').style.display = 'block';
-            const ctx = document.getElementById('eventChart').getContext('2d');
-            
-            if(eventChart) eventChart.destroy();
-            
-            eventChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['T-30 gün', 'Olay Günü', 'T+30 gün'],
-                    datasets: [{
-                        label: 'BTC Fiyat Hareketi (Simüle)',
-                        data: [Math.random()*100, Math.random()*100 + 20, Math.random()*100 + 40],
-                        borderColor: '#58a6ff'
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
+       function openEventGraph(date) {
+    document.getElementById('graphModal').style.display = 'block';
+    const ctx = document.getElementById('eventChart').getContext('2d');
+    
+    if(eventChart) eventChart.destroy();
+    
+    eventChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: Array.from({length: 60}, (_, i) => `T${i-30}`),
+            datasets: [{
+                label: 'BTC Fiyat Hareketi',
+                data: Array.from({length: 60}, () => 40000 + Math.random() * 20000),
+                borderColor: '#58a6ff',
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                annotation: {
+                    annotations: {
+                        line1: {
+                            type: 'line',
+                            xMin: 30, // Olayın gerçekleştiği merkez nokta
+                            xMax: 30,
+                            borderColor: 'rgb(255, 255, 255)',
+                            borderWidth: 2,
+                            label: { content: 'Olay Anı', enabled: true, position: 'top' }
+                        }
+                    }
+                }
+            }
         }
+    });
+}
 
-        function closeModal() {
+       function closeModal() {
             document.getElementById('graphModal').style.display = 'none';
         }
 
@@ -1016,6 +1072,10 @@
             initTimeline();
             runStochasticSimulation();
         };
+        function updateSliderLabel(id) {
+    const val = document.getElementById('param-a').value;
+    document.getElementById('a-val').innerText = val;
+}
     </script>
     <div id="graphModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; padding:50px;">
         <div style="background:#0d1117; width:90%; height:80%; margin:auto; padding:20px; border:1px solid #1f2937; position:relative; border-radius:10px;">
